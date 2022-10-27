@@ -1,0 +1,22 @@
+{
+    "env": {
+        "es2020": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "promise",
+        "import"
+    ],
+    "ignorePatterns": ["jest.config.js", ".eslintrc.json"],
+    "rules": {}
+}
