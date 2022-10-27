@@ -3,10 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { faker } from '@faker-js/faker';
+// eslint-disable-next-line import/no-cycle
 import Pedido from './Pedido';
+// eslint-disable-next-line import/no-cycle
 import Producto from './Producto';
 
 @Entity()
@@ -17,7 +19,7 @@ class EntradaPedido {
   @ManyToOne(() => Pedido, (pedido: Pedido) => pedido.entradas)
     pedido: Pedido;
 
-  @OneToOne(() => Producto)
+  @ManyToOne(() => Producto, (producto: Producto) => producto.entradas)
   @JoinColumn()
     producto: Producto;
 
@@ -28,6 +30,14 @@ class EntradaPedido {
     this.producto = producto;
     this.pedido = pedido;
     this.cantidad = cantidad;
+  }
+
+  static fake(producto: Producto, pedido: Pedido) {
+    const cantidad = faker.datatype.number({
+      min: 1,
+      max: 25,
+    });
+    return new EntradaPedido(producto, pedido, cantidad);
   }
 }
 

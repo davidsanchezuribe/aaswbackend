@@ -1,7 +1,8 @@
 import * as dotenv from 'dotenv';
 import app from './server/app';
 import 'reflect-metadata';
-import { AppDataSource } from './AppDataSource';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { AppDataSource, fillDatabase } from './AppDataSource';
 // @imports
 
 dotenv.config();
@@ -20,6 +21,10 @@ AppDataSource.initialize()
   .then(() => {
     // eslint-disable-next-line
     console.log('initialized database');
+    // fillDatabase();
+  }).then(() => {
+    // eslint-disable-next-line
+    console.log('Database filled');
   })
   .catch((error: string) => {
     // eslint-disable-next-line
