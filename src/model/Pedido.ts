@@ -37,7 +37,11 @@ class Pedido {
   )
     entradas!: EntradaPedido[];
 
-  constructor(cliente: Cliente, direccion_entrega: string, date: Date = new Date()) {
+  constructor(
+    cliente: Cliente,
+    direccion_entrega: string,
+    date: Date = new Date(),
+  ) {
     this.cliente = cliente;
     this.date = date;
     this.direccion_entrega = direccion_entrega;

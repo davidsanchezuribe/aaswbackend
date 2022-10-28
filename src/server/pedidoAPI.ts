@@ -116,7 +116,7 @@ pedidoAPI.post(
   },
 );
 
-/*pedidoAPI.patch(
+pedidoAPI.patch(
   '/',
   body('id').exists().isInt(),
   body('clienteId').exists().isString(),
@@ -139,21 +139,27 @@ pedidoAPI.post(
       const order = await pedidoRepository
         .findOneOrFail({ where: { id } });
       const cliente = await clienteRepository.findOneByOrFail({ id: clienteId });
-      const orden = await pedidoRepository.save(new Pedido(cliente, direccionEntrega));
-      const detalle = await Promise.all(entradas.map(async ({ productoId, cantidad }:
-      { productoId: number, cantidad: number }) => {
-        const producto = await productoRepository.findOneByOrFail({ id: productoId });
-        const newEntry = await entradaPedidoRepository
-          .create(new EntradaPedido(producto, orden, cantidad));
-        return newEntry;
-      }));
-      return res.status(200).json({ orden, detalle });
+      order.cliente = cliente;
+      order.direccion_entrega = direccionEntrega;
+      const oldEntries = await entradaPedidoRepository.findBy({ pedido: id });
+      entradaPedidoRepository.remove(oldEntries);
+      const detalle: EntradaPedido[] = await Promise
+        .all(entradas.map(async ({ productoId, cantidad }:
+        { productoId: number, cantidad: number }) => {
+          const producto = await productoRepository.findOneByOrFail({ id: productoId });
+          const newEntry = await entradaPedidoRepository
+            .create(new EntradaPedido(producto, order, cantidad));
+          return newEntry;
+        }));
+      order.entradas = detalle;
+      pedidoRepository.save(order);
+
+      return res.status(200).json({ order });
     } catch (error) {
       return res.status(400).json({ msg: getErrorMessage(error) });
     }
   },
 );
-*/
 
 pedidoAPI.delete(
   '/',
