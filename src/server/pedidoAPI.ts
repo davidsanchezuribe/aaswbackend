@@ -116,6 +116,45 @@ pedidoAPI.post(
   },
 );
 
+/*pedidoAPI.patch(
+  '/',
+  body('id').exists().isInt(),
+  body('clienteId').exists().isString(),
+  body('direccionEntrega').exists().isString(),
+  check('entradas').isArray(),
+  check('entradas.*.productoId').exists().isInt(),
+  check('entradas.*.cantidad').exists().isInt({ gt: 0 }),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {
+      id,
+      clienteId,
+      direccionEntrega,
+      entradas,
+    } = req.body;
+    try {
+      const order = await pedidoRepository
+        .findOneOrFail({ where: { id } });
+      const cliente = await clienteRepository.findOneByOrFail({ id: clienteId });
+      const orden = await pedidoRepository.save(new Pedido(cliente, direccionEntrega));
+      const detalle = await Promise.all(entradas.map(async ({ productoId, cantidad }:
+      { productoId: number, cantidad: number }) => {
+        const producto = await productoRepository.findOneByOrFail({ id: productoId });
+        const newEntry = await entradaPedidoRepository
+          .create(new EntradaPedido(producto, orden, cantidad));
+        return newEntry;
+      }));
+      return res.status(200).json({ orden, detalle });
+    } catch (error) {
+      return res.status(400).json({ msg: getErrorMessage(error) });
+    }
+  },
+);
+*/
+
 pedidoAPI.delete(
   '/',
   body('id').isInt(),

@@ -29,7 +29,11 @@ class Producto {
   @Column()
     existencia: number;
 
-  @OneToMany(() => EntradaPedido, (entradaPedido: EntradaPedido) => entradaPedido.producto)
+  @OneToMany(
+    () => EntradaPedido,
+    (entradaPedido: EntradaPedido) => entradaPedido.producto,
+    { onDelete: 'CASCADE' },
+  )
     entradas!: EntradaPedido[];
 
   constructor(
