@@ -30,7 +30,11 @@ class Pedido {
   @Column()
     numero_impresiones: number;
 
-  @OneToMany(() => EntradaPedido, (entradaPedido: EntradaPedido) => entradaPedido.pedido)
+  @OneToMany(
+    () => EntradaPedido,
+    (entradaPedido: EntradaPedido) => entradaPedido.pedido,
+    { onDelete: 'CASCADE' },
+  )
     entradas!: EntradaPedido[];
 
   constructor(cliente: Cliente, direccion_entrega: string, date: Date = new Date()) {
